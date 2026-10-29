@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LogicEdu Pro — геймифицированная платформа логических игр</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="aurora"><span></span><span></span><span></span><span></span></div>
+<div class="grid-bg"></div>
+<div class="stickers" id="stickers"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ================= АВТОРИЗАЦИЯ ================= -->
+<section id="authScreen" class="min-h-screen flex items-center justify-center p-4">
+  <div class="glass rounded-3xl p-8 w-full max-w-md pop">
+    <div class="text-center mb-6">
+      <div class="emblem lg mx-auto mb-4" style="background:linear-gradient(135deg,#6366f1,#22d3ee)">🎓</div>
+      <h1 class="text-3xl font-bold grad-text">LogicEdu Pro</h1>
+      <p class="text-slate-400 text-sm mt-1">Геймифицированная платформа логических игр для учёбы</p>
+    </div>
+    <div class="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-white/5 mb-5">
+      <button id="tabReg" class="py-2.5 rounded-xl text-sm font-semibold transition">Регистрация</button>
+      <button id="tabLogin" class="py-2.5 rounded-xl text-sm font-semibold transition">Войти</button>
+    </div>
+    <label id="authNameLabel" class="block text-xs text-slate-400 mb-1">Имя пользователя</label>
+    <input id="authName" class="inp mb-3" placeholder="Например, Айдана" maxlength="24" autocomplete="username">
+    <div id="regWrap">
+      <label class="block text-xs text-slate-400 mb-1">Электронная почта</label>
+      <input id="authEmail" type="email" class="inp mb-3" placeholder="name@example.com" maxlength="254" autocomplete="email">
+    </div>
+    <label class="block text-xs text-slate-400 mb-1">Пароль</label>
+    <input id="authPass" type="password" class="inp mb-3" placeholder="Не менее 8 символов" maxlength="72" autocomplete="new-password">
+    <div id="regWrapConfirm">
+      <label class="block text-xs text-slate-400 mb-1">Повторите пароль</label>
+      <input id="authPassConfirm" type="password" class="inp mb-3" placeholder="Введите пароль ещё раз" maxlength="72" autocomplete="new-password">
+    </div>
+    <p id="authError" class="hidden text-sm text-rose-400 mb-3"></p>
+    <button id="authSubmit" class="btn btn-primary w-full py-3 rounded-xl font-semibold">Зарегистрироваться →</button>
+    <p class="text-center text-xs text-slate-500 mt-4"> </p>
+  </div>
+</section>
+
+<!-- ================= ПРИЛОЖЕНИЕ ================= -->
+<div id="app" class="hidden">
+  <header class="sticky top-0 z-40 glass border-x-0 border-t-0">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center gap-3">
+      <button data-nav="home" class="flex items-center gap-2 font-bold text-lg display">
+        <span class="emblem sm" style="background:linear-gradient(135deg,#6366f1,#22d3ee)">🎓</span> LogicEdu Pro
+      </button>
+      <nav class="flex flex-wrap gap-1 mx-auto">
+        <button class="nav" data-nav="home">Главная</button>
+        <button class="nav" data-nav="games">Игры</button>
+        <button class="nav" data-nav="daily">Задание дня</button>
+        <button class="nav" data-nav="about">Механики</button>
+        <button class="nav" data-nav="rating">Рейтинг</button>
+        <button class="nav" data-nav="ach">Достижения</button>
+        <button class="nav" data-nav="profile">Профиль</button>
+      </nav>
+      <div class="flex items-center gap-2 text-xs font-semibold">
+        <span class="px-3 py-1.5 rounded-full glass" title="Серия дней">🔥 <span id="hStreak">0</span></span>
+        <span class="px-3 py-1.5 rounded-full glass" title="Уровень">⭐ Ур: <span id="hLevel">1</span></span>
+        <span class="px-3 py-1.5 rounded-full glass" title="Опыт">🏆 XP: <span id="hXp">0</span></span>
+        <button id="logout" class="px-3 py-1.5 rounded-full glass hover:bg-white/10" title="Выйти">🚪</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- ГЛАВНАЯ -->
+    <section id="page-home" class="page">
+      <div class="grid lg:grid-cols-2 gap-8 items-center mb-12">
+        <div>
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 mb-4">● Учебная геймификация</span>
+          <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Логические игры,<br><span class="grad-text">которые учат</span></h1>
+          <p class="text-slate-400 mb-6 max-w-lg">10 настоящих логических игр: судоку, пятнашки, Ханойская башня, мемори, Саймон, кодовый замок и другие. Три уровня сложности, XP, ранги, 26 достижений и рейтинг класса.</p>
+          <div class="flex flex-wrap gap-3 mb-8">
+            <button data-nav="games" class="btn btn-primary px-6 py-3 rounded-xl font-semibold">Начать игру →</button>
+            <button data-nav="daily" class="btn btn-ghost px-6 py-3 rounded-xl font-semibold">Задание дня 🎯</button>
+          </div>
+          <div class="grid grid-cols-4 gap-3 stagger">
+            <div class="glass rounded-2xl p-3 text-center"><div class="text-2xl font-bold display">10</div><div class="text-xs text-slate-400">игр</div></div>
+            <div class="glass rounded-2xl p-3 text-center"><div class="text-2xl font-bold display" id="sWins">0</div><div class="text-xs text-slate-400">побед</div></div>
+            <div class="glass rounded-2xl p-3 text-center"><div class="text-2xl font-bold display" id="sBadges">0</div><div class="text-xs text-slate-400">наград</div></div>
+            <div class="glass rounded-2xl p-3 text-center"><div class="text-2xl font-bold display" id="sRank">1</div><div class="text-xs text-slate-400">место</div></div>
+          </div>
+        </div>
+        <div class="glass rounded-3xl p-6 relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-indigo-500/30 blur-3xl"></div>
+          <h3 class="font-bold mb-4">Эмблемы игр</h3>
+          <div id="emblemWall" class="grid grid-cols-5 gap-3 stagger"></div>
+          <div class="mt-5">
+            <div class="flex justify-between text-xs text-slate-400 mb-1"><span id="homeRank">Ур. 1</span><span id="homeNext"></span></div>
+            <div class="bar"><div id="homeBar" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Продолжить обучение</h2>
+      <div id="continueRow" class="grid md:grid-cols-3 gap-4 mb-12 stagger"></div>
+
+      <div class="grid md:grid-cols-4 gap-4 stagger">
+        <div class="glass rounded-2xl p-5"><div class="text-3xl mb-2">⏱️</div><div class="font-bold">Таймер и скорость</div><p class="text-sm text-slate-400 mt-1">Быстрая победа даёт бонус +15% XP.</p></div>
+        <div class="glass rounded-2xl p-5"><div class="text-3xl mb-2">🎯</div><div class="font-bold">Качество решения</div><p class="text-sm text-slate-400 mt-1">Меньше ходов и ошибок — больше очков.</p></div>
+        <div class="glass rounded-2xl p-5"><div class="text-3xl mb-2">🏅</div><div class="font-bold">26 достижений</div><p class="text-sm text-slate-400 mt-1">Медали за мастерство в каждой игре.</p></div>
+        <div class="glass rounded-2xl p-5"><div class="text-3xl mb-2">📈</div><div class="font-bold">Общий рейтинг</div><p class="text-sm text-slate-400 mt-1">Соревнуйтесь с другими игроками по XP и победам.</p></div>
+      </div>
+    </section>
+
+    <!-- ИГРЫ -->
+    <section id="page-games" class="page">
+      <h2 class="text-3xl font-bold mb-1">Каталог игр</h2>
+      <p class="text-slate-400 mb-5">Выберите сложность — от неё зависят размер поля, время и награда</p>
+      <div id="diffRow" class="flex flex-wrap gap-2 mb-6"></div>
+      <div id="gamesGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger"></div>
+    </section>
+
+    <!-- ЗАДАНИЕ ДНЯ -->
+    <section id="page-daily" class="page">
+      <div class="glass rounded-3xl p-8 max-w-xl mx-auto text-center pop">
+        <div id="dailyEmblem" class="mx-auto mb-4"></div>
+        <h2 class="text-3xl font-bold mb-2">Задание дня</h2>
+        <p class="text-slate-400 mb-1">Каждый день — новая игра из каталога. Награда за неё удвоена. Доступно один раз в сутки.</p>
+        <p id="dailyGame" class="font-semibold text-lg mb-4"></p>
+        <p id="dailyState" class="text-sm text-cyan-300 mb-5"></p>
+        <button id="dailyBtn" class="btn btn-primary px-8 py-3 rounded-xl font-semibold">Пройти задание дня</button>
+      </div>
+    </section>
+
+    <!-- МЕХАНИКИ -->
+    <section id="page-about" class="page">
+      <h2 class="text-3xl font-bold mb-6">Как устроена геймификация</h2>
+      <div class="grid md:grid-cols-2 gap-4 mb-8 stagger">
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-lg mb-2">🧮 Формула очков</h3>
+          <p class="text-sm text-slate-400 mb-3">XP = награда игры × множитель сложности × качество решения (0–100%) × 2 для задания дня + бонус за скорость.</p>
+          <ul class="text-sm text-slate-300 space-y-1">
+            <li>• Лёгкий ×1 · Средний ×1.5 · Сложный ×2</li>
+            <li>• Качество: точность, число ходов или ошибок относительно оптимума</li>
+            <li>• Победа быстрее 45 секунд → +15% XP</li>
+          </ul>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-lg mb-2">🎓 Учебная логика</h3>
+          <p class="text-sm text-slate-400 mb-3">Каждая игра тренирует конкретный навык: дедукцию, память, планирование, счёт, двоичную систему. Поле генерируется заново при каждом запуске.</p>
+          <ul class="text-sm text-slate-300 space-y-1">
+            <li>• 10 рангов от «Первых шагов» до «Легенды академии» (по 200 XP за уровень)</li>
+            <li>• 26 достижений за мастерство и дисциплину</li>
+            <li>• Общий рейтинг игроков по XP и победам</li>
+          </ul>
+        </div>
+      </div>
+      <div id="aboutGrid" class="grid md:grid-cols-2 gap-4 stagger"></div>
+    </section>
+
+    <!-- ИГРА -->
+    <section id="page-play" class="page">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <button id="quitGame" class="btn btn-ghost px-4 py-2 rounded-xl text-sm">← Прервать и вернуться</button>
+          <div class="flex items-center gap-3 text-sm">
+            <span id="playStatus" class="text-slate-400"></span>
+            <span class="px-3 py-1.5 rounded-full glass code-font" id="playClock">0:00</span>
+          </div>
+        </div>
+        <div id="playHead" class="glass rounded-2xl p-4 mb-4 flex items-center gap-4"></div>
+        <div id="playArea" class="glass rounded-3xl p-6"></div>
+      </div>
+    </section>
+
+    <!-- РЕЙТИНГ -->
+    <section id="page-rating" class="page">
+      <h2 class="text-3xl font-bold mb-4">Таблица лидеров</h2>
+      <div class="glass rounded-2xl overflow-hidden overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-slate-400 text-left text-xs uppercase"><tr>
+            <th class="p-3">Место</th><th class="p-3">Участник</th><th class="p-3">Ранг</th><th class="p-3">Победы</th><th class="p-3">Награды</th><th class="p-3">XP</th>
+          </tr></thead>
+          <tbody id="ratingBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ДОСТИЖЕНИЯ -->
+    <section id="page-ach" class="page">
+      <h2 class="text-3xl font-bold mb-4">Ранги и награды</h2>
+      <div class="glass rounded-2xl p-5 mb-6">
+        <div class="flex justify-between text-sm mb-2"><span id="achNow" class="font-semibold"></span><span id="achNext" class="text-slate-400"></span></div>
+        <div class="bar"><div id="achBar" style="width:0%"></div></div>
+      </div>
+      <div id="achGrid" class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8 stagger"></div>
+      <h3 class="text-xl font-bold mb-3">Медали <span id="badgeCount" class="text-slate-400 text-base font-normal"></span></h3>
+      <div id="badgeGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+    </section>
+
+    <!-- ПРОФИЛЬ -->
+    <section id="page-profile" class="page">
+      <h2 class="text-3xl font-bold mb-4">Профиль</h2>
+      <div class="glass rounded-2xl p-6 mb-6 flex flex-wrap items-center gap-5">
+        <div class="flex flex-col items-center gap-2">
+          <div id="pAvatar" class="emblem lg user-avatar" style="background:linear-gradient(135deg,#6366f1,#f472b6)">🧠</div>
+          <button id="openAvatarPicker" class="btn btn-ghost px-3 py-2 rounded-xl text-xs">🖼️ Изменить аватар</button>
+        </div>
+        <div class="flex-1 min-w-[200px]">
+          <div id="pName" class="text-2xl font-bold display">—</div>
+          <div id="pTitle" class="text-slate-400 text-sm">Первые шаги</div>
+        </div>
+        <div class="flex gap-2">
+          <button id="resetProgress" class="btn btn-ghost px-4 py-2 rounded-xl text-sm text-rose-300">Сбросить прогресс</button>
+          <button id="logout2" class="btn btn-ghost px-4 py-2 rounded-xl text-sm">Выйти</button>
+        </div>
+      </div>
+      <div id="avatarPicker" class="glass rounded-2xl p-5 mb-6 hidden">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div><h3 class="text-lg font-bold">Выбери бесплатный аватар</h3><p class="text-sm text-slate-400">Или загрузи своё изображение с устройства.</p></div>
+          <label for="avatarUpload" class="btn btn-primary px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer">📁 Загрузить фото</label>
+          <input id="avatarUpload" type="file" accept="image/*" class="hidden">
+        </div>
+        <div id="avatarOptions" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3"></div>
+        <p class="text-xs text-slate-500 mt-4">Фото обрабатывается в браузере и сохраняется только в этом браузере. После подключения MySQL можно будет хранить аватары в аккаунте.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 stagger">
+        <div class="glass rounded-2xl p-4"><div class="text-xs text-slate-400">Сыграно партий</div><div id="pPlays" class="font-bold">0</div></div>
+        <div class="glass rounded-2xl p-4"><div class="text-xs text-slate-400">Победы</div><div id="pWins" class="font-bold">0</div></div>
+        <div class="glass rounded-2xl p-4"><div class="text-xs text-slate-400">Идеальных прохождений</div><div id="pPerf" class="font-bold">0</div></div>
+      </div>
+      <h3 class="text-xl font-bold mb-3">Прогресс по играм</h3>
+      <div id="pGames" class="grid md:grid-cols-2 gap-3 stagger"></div>
+    </section>
+
+  </main>
+  <footer class="text-center text-xs text-slate-500 py-8">LogicEdu Pro · геймифицированный веб-ресурс логических игр для учебного процесса</footer>
+</div>
+
+
+<button id="musicToggle" type="button" aria-label="Включить музыку" title="Включить спокойную фоновую музыку" style="position:fixed;right:18px;bottom:18px;z-index:9999;border:1px solid rgba(139,92,246,.65);background:rgba(15,18,42,.92);color:#e9d5ff;padding:12px 16px;border-radius:999px;box-shadow:0 0 24px rgba(139,92,246,.22);backdrop-filter:blur(12px);font-weight:700;cursor:pointer">♫ Музыка: выкл.</button>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
